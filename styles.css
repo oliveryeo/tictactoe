@@ -15,8 +15,22 @@ html, body, .container {
   grid-template-rows: 200px 1fr 100px;
 }
 
+.play-area {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+  background-color: aqua;
+}
+
 .play-grids {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(3, 1fr);
+  background-color: orange;
+}
+
+.play-grids > div {
+  height: 200px;
+  width: 200px;
+  border-style: solid;
 }
