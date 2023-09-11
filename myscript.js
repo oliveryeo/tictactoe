@@ -5,8 +5,40 @@ const Player = () => {
 
 // Module for gameBoard
 const gameBoard = (() => {
+  const rows = 3;
+  const columns = 3;
   const board = [];
 
-  // if scoreTracker length is 9 → find the final results of the game
-  // find all possible winning combinations → check if any winning combination is satisfied by a player → that player wins
+  for (let i = 0; i < rows; i++) {
+    board[i] = [];
+    for (let j = 0; j < columns; j++) {
+      board[i].push(cell());
+    }
+  }
+
+  const selectGrid = (row, column, playerID) => {
+    const selectedGrid = board[row][column];
+
+    // Create error handling where grid is already filled, hence player cannot select
+
+    selectedGrid.addMark(playerID);
+  }
+
+  return { selectGrid };
+})();
+
+// Cell object for each grid in tic tac toe
+const cell = (() => {
+  let value = 0;
+
+  const addMark = (playerID) => {
+    value = playerID;
+  };
+
+  const getValue = () => value;
+
+  return {
+    addMark,
+    getValue
+  };
 })();
