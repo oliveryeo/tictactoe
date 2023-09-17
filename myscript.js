@@ -95,13 +95,13 @@ const gameController = ((
 })();
 
 // Module for screenController
-const screenController = () => ({
+const screenController = (() => {
   const playerTurnDiv = document.querySelector(".turn");
-  const boardDiv = document.querySelector(".board");
+  const playGrids = document.querySelector(".play-grids");
 
   const updateScreen = () => {
     // clear the board
-    boardDiv.textContent = "";
+    playGrids.textContent = "";
 
     // get the newest version of the board and player turn
     const board = gameController.getBoard();
@@ -121,7 +121,7 @@ const screenController = () => ({
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
         cellButton.textContent = cell.getValue();
-        boardDiv.appendChild(cellButton);
+        playGrids.appendChild(cellButton);
       })
     })
   }
@@ -135,12 +135,12 @@ const screenController = () => ({
     game.playRound(selectedColumn);
     updateScreen();
   }
-  boardDiv.addEventListener("click", clickHandlerBoard);
+  playGrids.addEventListener("click", clickHandlerBoard);
 
-    // Initial render
-    updateScreen();
+  // Initial render
+  updateScreen();
 
-    // We don't need to return anything from this module because everything is encapsulated inside this screen controller.
+  // We don't need to return anything from this module because everything is encapsulated inside this screen controller.
 })();
 
 console.log(gameBoard.getBoard());
