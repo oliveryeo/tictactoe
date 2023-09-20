@@ -126,14 +126,17 @@ const screenController = (() => {
     // Render board squares
     board.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
-        // TODO -- tracked 16/09/2023
         const cellButton = document.createElement("button");
         cellButton.classList.add("cell");
         // Create a data attribute to identify the column
         // This makes it easier to pass into our `playRound` function 
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
-        cellButton.textContent = cell.getValue();
+        if (cell.getValue() === 1) {
+          cellButton.textContent = "o";
+        } else if (cell.getValue() === 2) {
+          cellButton.textContent = "x";
+        }
         playGrids.appendChild(cellButton);
       })
     })
