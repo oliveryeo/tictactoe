@@ -21,7 +21,8 @@ const gameBoard = (() => {
   const playGrid = (row, column, playerID) => {
     const selectedGrid = board[row][column];
 
-    // Create error handling where grid is already filled, hence player cannot select
+    /*  Create error handling where grid is already filled, hence player cannot select.
+        Value of 1 will indicate that the grid is already occupied */
     if (selectedGrid.getValue() != 0) {
       return 1;
     }
@@ -80,6 +81,9 @@ const gameController = ((
     console.log(
       `${getActivePlayer().name} has selected grid ${row}, ${column}...`
     );
+
+    /*  If grid is already occupied, value of 1 will be returned. 
+        Otherwise, undefined is returned and the code will continue */
     if (gameBoard.playGrid(row, column, getActivePlayer().token) == 1) {
       console.log(
         `${getActivePlayer().name} has selected an already occupied grid. Please choose another grid.`
