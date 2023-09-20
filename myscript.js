@@ -22,6 +22,9 @@ const gameBoard = (() => {
     const selectedGrid = board[row][column];
 
     // Create error handling where grid is already filled, hence player cannot select
+    if (selectedGrid.getValue() != 0) {
+      return 1;
+    }
 
     selectedGrid.addMark(playerID);
   }
@@ -77,13 +80,19 @@ const gameController = ((
     console.log(
       `${getActivePlayer().name} has selected grid ${row}, ${column}...`
     );
-    gameBoard.playGrid(row, column, getActivePlayer().token);
-    
-    /*  This is where we would check for a winner and handle that logic,
-    such as a win message. */
+    if (gameBoard.playGrid(row, column, getActivePlayer().token) == 1) {
+      console.log(
+        `${getActivePlayer().name} has selected an already occupied grid. Please choose another grid.`
+      )
+    } else {
+      /*  This is where we would check for a winner and handle that logic,
+          such as a win message. */
 
-    switchPlayerTurn();
-    printPlayerTurn();
+      switchPlayerTurn();
+      printPlayerTurn();  
+    };
+    
+    
   };
 
   return {
@@ -128,11 +137,13 @@ const screenController = (() => {
   
   // Add event listener for the board
   function clickHandlerBoard(e) {
+    console.log(e);
+    const selectedRow = e.target.dataset.row;
     const selectedColumn = e.target.dataset.column;
     // Make sure I've clicked a column and not the gaps in between
     if (!selectedColumn) return;
     
-    game.playRound(selectedColumn);
+    gameController.playRound(selectedRow, selectedColumn);
     updateScreen();
   }
   playGrids.addEventListener("click", clickHandlerBoard);
