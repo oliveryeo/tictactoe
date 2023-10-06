@@ -1,8 +1,3 @@
-// Factory Func for Players
-const Player = () => {
-  // add specific mark on the board → tag that space to the player → dont allow next player to click
-};
-
 // Module for Game Board
 const gameBoard = (() => {
   const rows = 3;
@@ -21,16 +16,13 @@ const gameBoard = (() => {
   const playGrid = (row, column, playerID) => {
     const selectedGrid = board[row][column];
 
-    /*  Create error handling where grid is already filled, hence player cannot select.
+    /*  Error handling where grid is already filled, hence player cannot select.
         Value of 1 will indicate that the grid is already occupied */
-    if (selectedGrid.getValue() != 0) {
-      return 1;
-    }
-
+    if (selectedGrid.getValue() != 0) return 1;
     selectedGrid.addMark(playerID);
-  }
+  };
 
-  // Cell object for each grid in tic tac toe
+  /* Cell object for each grid in tic tac toe */
   function Cell() {
     let value = 0;
 
@@ -42,7 +34,7 @@ const gameBoard = (() => {
 
     return {
       addMark,
-      getValue
+      getValue,
     };
   }
 
@@ -57,25 +49,15 @@ const gameController = ((
   const players = [
     {
       name: playerOneName,
-      token: 1
+      token: 1,
     },
     {
       name: playerTwoName,
-      token: 2
-    }
+      token: 2,
+    },
   ];
 
   let activePlayer = players[0];
-
-  const switchPlayerTurn = () => {
-    activePlayer = activePlayer === players[0] ? players[1] : players[0];
-  };
-
-  const getActivePlayer = () => activePlayer;
-
-  const printPlayerTurn = () => {
-    console.log(`${getActivePlayer().name}'s turn.`);
-  };
 
   const playRound = (row, column) => {
     console.log(
@@ -83,32 +65,98 @@ const gameController = ((
     );
 
     /*  If grid is already occupied, value of 1 will be returned. 
-        Otherwise, undefined is returned and the code will continue */
-    if (gameBoard.playGrid(row, column, getActivePlayer().token) == 1) {
+          Otherwise, undefined is returned and the code will continue */
+    if (gameBoard.playGrid(row, column, getActivePlayer().token) === 1) {
       console.log(
-        `${getActivePlayer().name} has selected an already occupied grid. Please choose another grid.`
-      )
+        `${
+          getActivePlayer().name
+        } has selected an already occupied grid. Please choose another grid.`
+      );
     } else {
-      /*  This is where we would check for a winner and handle that logic,
-          such as a win message. */
+      // Check for winner and return a value if there is a winner so to skip the switchPlayerTurn and printPlayerTurn
+      board = gameBoard.getBoard();
+
+      // Horizontal row 1
+      if (board[0][0] === 1 && board[0][1] === 1 && board[0][2] === 1) {
+        return 1;
+      } else if (board[0][0] === 2 && board[0][1] === 2 && board[0][2] === 2) {
+        return 2;
+      }
+
+      // Horizontal row 2
+      if (board[1][0] === 1 && board[1][1] === 1 && board[1][2] === 1) {
+        return 1;
+      } else if (board[1][0] === 2 && board[1][1] === 2 && board[1][2] === 2) {
+        return 2;
+      }
+
+      // Horizontal row 3
+      if (board[2][0] === 1 && board[2][1] === 1 && board[2][2] === 1) {
+        return 1;
+      } else if (board[2][0] === 2 && board[2][1] === 2 && board[2][2] === 2) {
+        return 2;
+      }
+
+      // Vertical row 1
+      if (board[0][0] === 1 && board[1][0] === 1 && board[2][0] === 1) {
+        return 1;
+      } else if (board[0][0] === 2 && board[1][0] === 2 && board[2][0] === 2) {
+        return 2;
+      }
+
+      // Vertical row 2
+      if (board[0][1] === 1 && board[1][1] === 1 && board[2][1] === 1) {
+        return 1;
+      } else if (board[0][1] === 2 && board[1][1] === 2 && board[2][1] === 2) {
+        return 2;
+      }
+
+      // Vertical row 3
+      if (board[0][2] === 1 && board[1][2] === 1 && board[2][2] === 1) {
+        return 1;
+      } else if (board[0][2] === 2 && board[1][2] === 2 && board[2][2] === 2) {
+        return 2;
+      }
+
+      // Cross 1
+      if (board[0][0] === 1 && board[1][1] === 1 && board[2][2] === 1) {
+        return 1;
+      } else if (board[0][0] === 2 && board[1][1] === 2 && board[2][2] === 2) {
+        return 2;
+      }
+
+      // Cross 2
+      if (board[0][2] === 1 && board[1][1] === 1 && board[2][0] === 1) {
+        return 1;
+      } else if (board[0][2] === 2 && board[1][1] === 2 && board[2][0] === 2) {
+        return 2;
+      }
 
       switchPlayerTurn();
-      printPlayerTurn();  
-    };
-    
-    
+      printPlayerTurn();
+    }
+  };
+
+  const switchPlayerTurn = () => {
+    activePlayer = activePlayer === players[0] ? players[1] : players[0];
+  };
+
+  const getActivePlayer = () => activePlayer;
+
+  // For console checking purpose
+  const printPlayerTurn = () => {
+    console.log(`${getActivePlayer().name}'s turn.`);
   };
 
   return {
     playRound,
     getActivePlayer,
-    getBoard: gameBoard.getBoard
+    getBoard: gameBoard.getBoard,
   };
-
 })();
 
 // Module for screenController
-const screenController = (() => {
+const screenController = ((condition = 0) => {
   const playerTurnDiv = document.querySelector(".turn");
   const playGrids = document.querySelector(".play-grids");
 
@@ -129,29 +177,45 @@ const screenController = (() => {
         const cellButton = document.createElement("button");
         cellButton.classList.add("cell");
         // Create a data attribute to identify the column
-        // This makes it easier to pass into our `playRound` function 
+        // This makes it easier to pass into our `playRound` function
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
         if (cell.getValue() === 1) {
-          cellButton.textContent = "o";
+          cellButton.textContent = "O";
         } else if (cell.getValue() === 2) {
-          cellButton.textContent = "x";
+          cellButton.textContent = "X";
         }
         playGrids.appendChild(cellButton);
-      })
-    })
-  }
-  
+      });
+    });
+
+    // TODO: Handle what appears on the screen when a winner is decided
+    if (condition === 1) {
+      // Winner is player 1
+    } else if (condition === 2) {
+      // Winner is player 2
+    }
+  };
+
   // Add event listener for the board
   function clickHandlerBoard(e) {
     console.log(e);
+
+    // Use the event object to retrieved the clicked element's attributes
     const selectedRow = e.target.dataset.row;
     const selectedColumn = e.target.dataset.column;
     // Make sure I've clicked a column and not the gaps in between
-    if (!selectedColumn) return;
-    
-    gameController.playRound(selectedRow, selectedColumn);
-    updateScreen();
+    if (!selectedColumn || !selectedRow) return;
+
+    // Runs playRound, checks if value 1 is returned (winner), run updateScreen() with winner condition?
+    const roundValue = gameController.playRound(selectedRow, selectedColumn);
+    if (roundValue === 1) {
+      updateScreen(1);
+    } else if (roundValue === 2) {
+      updateScreen(2);
+    } else {
+      updateScreen();
+    }
   }
   playGrids.addEventListener("click", clickHandlerBoard);
 

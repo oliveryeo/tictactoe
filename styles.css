@@ -26,15 +26,17 @@ body,
 
 .play-grids {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
   background-color: orange;
 }
 
 .play-grids > button {
-  height: 200px;
-  width: 200px;
   border-style: solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 150px;
 }
 
 button {
