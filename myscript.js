@@ -156,11 +156,11 @@ const gameController = ((
 })();
 
 // Module for screenController
-const screenController = ((condition = 0) => {
+const screenController = (() => {
   const playerTurnDiv = document.querySelector(".turn");
   const playGrids = document.querySelector(".play-grids");
 
-  const updateScreen = () => {
+  const updateScreen = (condition = 0) => {
     // clear the board
     playGrids.textContent = "";
 
@@ -191,7 +191,7 @@ const screenController = ((condition = 0) => {
 
     // TODO: Handle what appears on the screen when a winner is decided
     if (condition === 1) {
-      // Winner is player 1
+      playerTurnDiv.textContent = `${activePlayer.name} is the winner!`;
     } else if (condition === 2) {
       // Winner is player 2
     }
