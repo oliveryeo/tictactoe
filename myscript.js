@@ -77,58 +77,58 @@ const gameController = ((
       board = gameBoard.getBoard();
 
       // Horizontal row 1
-      if (board[0][0] === 1 && board[0][1] === 1 && board[0][2] === 1) {
+      if (board[0][0].getValue() === 1 && board[0][1].getValue() === 1 && board[0][2].getValue() === 1) {
         return 1;
-      } else if (board[0][0] === 2 && board[0][1] === 2 && board[0][2] === 2) {
+      } else if (board[0][0].getValue() === 2 && board[0][1].getValue() === 2 && board[0][2].getValue() === 2) {
         return 2;
       }
 
       // Horizontal row 2
-      if (board[1][0] === 1 && board[1][1] === 1 && board[1][2] === 1) {
+      if (board[1][0].getValue() === 1 && board[1][1].getValue() === 1 && board[1][2].getValue() === 1) {
         return 1;
-      } else if (board[1][0] === 2 && board[1][1] === 2 && board[1][2] === 2) {
+      } else if (board[1][0].getValue() === 2 && board[1][1].getValue() === 2 && board[1][2].getValue() === 2) {
         return 2;
       }
 
       // Horizontal row 3
-      if (board[2][0] === 1 && board[2][1] === 1 && board[2][2] === 1) {
+      if (board[2][0].getValue() === 1 && board[2][1].getValue() === 1 && board[2][2].getValue() === 1) {
         return 1;
-      } else if (board[2][0] === 2 && board[2][1] === 2 && board[2][2] === 2) {
+      } else if (board[2][0].getValue() === 2 && board[2][1].getValue() === 2 && board[2][2].getValue() === 2) {
         return 2;
       }
 
       // Vertical row 1
-      if (board[0][0] === 1 && board[1][0] === 1 && board[2][0] === 1) {
+      if (board[0][0].getValue() === 1 && board[1][0].getValue() === 1 && board[2][0].getValue() === 1) {
         return 1;
-      } else if (board[0][0] === 2 && board[1][0] === 2 && board[2][0] === 2) {
+      } else if (board[0][0].getValue() === 2 && board[1][0].getValue() === 2 && board[2][0].getValue() === 2) {
         return 2;
       }
 
       // Vertical row 2
-      if (board[0][1] === 1 && board[1][1] === 1 && board[2][1] === 1) {
+      if (board[0][1].getValue() === 1 && board[1][1].getValue() === 1 && board[2][1].getValue() === 1) {
         return 1;
-      } else if (board[0][1] === 2 && board[1][1] === 2 && board[2][1] === 2) {
+      } else if (board[0][1].getValue() === 2 && board[1][1].getValue() === 2 && board[2][1].getValue() === 2) {
         return 2;
       }
 
       // Vertical row 3
-      if (board[0][2] === 1 && board[1][2] === 1 && board[2][2] === 1) {
+      if (board[0][2].getValue() === 1 && board[1][2].getValue() === 1 && board[2][2].getValue() === 1) {
         return 1;
-      } else if (board[0][2] === 2 && board[1][2] === 2 && board[2][2] === 2) {
+      } else if (board[0][2].getValue() === 2 && board[1][2].getValue() === 2 && board[2][2].getValue() === 2) {
         return 2;
       }
 
       // Cross 1
-      if (board[0][0] === 1 && board[1][1] === 1 && board[2][2] === 1) {
+      if (board[0][0].getValue() === 1 && board[1][1].getValue() === 1 && board[2][2].getValue() === 1) {
         return 1;
-      } else if (board[0][0] === 2 && board[1][1] === 2 && board[2][2] === 2) {
+      } else if (board[0][0].getValue() === 2 && board[1][1].getValue() === 2 && board[2][2].getValue() === 2) {
         return 2;
       }
 
       // Cross 2
-      if (board[0][2] === 1 && board[1][1] === 1 && board[2][0] === 1) {
+      if (board[0][2].getValue() === 1 && board[1][1].getValue() === 1 && board[2][0].getValue() === 1) {
         return 1;
-      } else if (board[0][2] === 2 && board[1][1] === 2 && board[2][0] === 2) {
+      } else if (board[0][2].getValue() === 2 && board[1][1].getValue() === 2 && board[2][0].getValue() === 2) {
         return 2;
       }
 
@@ -210,8 +210,10 @@ const screenController = ((condition = 0) => {
     // Runs playRound, checks if value 1 is returned (winner), run updateScreen() with winner condition?
     const roundValue = gameController.playRound(selectedRow, selectedColumn);
     if (roundValue === 1) {
+      console.log("Player 1 is winner!");
       updateScreen(1);
     } else if (roundValue === 2) {
+      console.log("Player 2 is winner!");
       updateScreen(2);
     } else {
       updateScreen();
