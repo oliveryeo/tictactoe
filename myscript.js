@@ -4,10 +4,27 @@ const gameBoard = (() => {
   const columns = 3;
   const board = [];
 
+  /* Cell object for each grid in tic tac toe */
+  const cellFactory = () => {
+    let value = 0;
+
+    const addMark = (playerID) => {
+      value = playerID;
+    };
+
+    const getValue = () => value;
+
+    return {
+      addMark,
+      getValue,
+    };
+  };
+
+  // Put a cell object in all array
   for (let i = 0; i < rows; i++) {
     board[i] = [];
     for (let j = 0; j < columns; j++) {
-      board[i].push(Cell());
+      board[i].push(cellFactory());
     }
   }
 
@@ -21,22 +38,6 @@ const gameBoard = (() => {
     if (selectedGrid.getValue() != 0) return 1;
     selectedGrid.addMark(playerID);
   };
-
-  /* Cell object for each grid in tic tac toe */
-  function Cell() {
-    let value = 0;
-
-    const addMark = (playerID) => {
-      value = playerID;
-    };
-
-    const getValue = () => value;
-
-    return {
-      addMark,
-      getValue,
-    };
-  }
 
   return { playGrid, getBoard };
 })();
