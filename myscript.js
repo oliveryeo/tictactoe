@@ -57,6 +57,7 @@ const gameController = ((
     },
   ];
 
+  let roundsElapsed = 0;
   let activePlayer = players[0];
 
   const playRound = (row, column) => {
@@ -139,9 +140,12 @@ const gameController = ((
 
   const switchPlayerTurn = () => {
     activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    roundsElapsed++;
   };
 
   const getActivePlayer = () => activePlayer;
+
+  const getroundsElapsed = () => roundsElapsed;
 
   // For console checking purpose
   const printPlayerTurn = () => {
@@ -151,6 +155,7 @@ const gameController = ((
   return {
     playRound,
     getActivePlayer,
+    getroundsElapsed,
     getBoard: gameBoard.getBoard,
   };
 })();
@@ -190,10 +195,17 @@ const screenController = (() => {
     });
 
     // TODO: Handle what appears on the screen when a winner is decided
-    if (condition === 1) {
+    if (condition === 1 || condition === 2) {
+      // Display winner's name
       playerTurnDiv.textContent = `${activePlayer.name} is the winner!`;
-    } else if (condition === 2) {
-      // Winner is player 2
+
+      // TODO: Edit DOM to display winning styles
+      
+      // TODO: Stop the game entirely by removing event listener to playGrids
+      playGrids.removeEventListener("click", clickHandlerBoard);
+    } else if (condition === 3) {
+      playerTurnDiv.textContent = `It is a draw!`;
+      playGrids.removeEventListener("click", clickHandlerBoard);
     }
   };
 
@@ -204,20 +216,24 @@ const screenController = (() => {
     // Use the event object to retrieved the clicked element's attributes
     const selectedRow = e.target.dataset.row;
     const selectedColumn = e.target.dataset.column;
+    
     // Make sure I've clicked a column and not the gaps in between
     if (!selectedColumn || !selectedRow) return;
 
     // Runs playRound, checks if value 1 is returned (winner), run updateScreen() with winner condition?
     const roundValue = gameController.playRound(selectedRow, selectedColumn);
+    const totalRounds = gameController.getroundsElapsed();
     if (roundValue === 1) {
       console.log("Player 1 is winner!");
       updateScreen(1);
     } else if (roundValue === 2) {
       console.log("Player 2 is winner!");
       updateScreen(2);
+    } else if (totalRounds === 9){
+      updateScreen(3);
     } else {
       updateScreen();
-    }
+    };
   }
   playGrids.addEventListener("click", clickHandlerBoard);
 

@@ -42,3 +42,7 @@ body,
 button {
   all: unset;
 }
+
+.turn {
+  font-size: 2rem;
+}
