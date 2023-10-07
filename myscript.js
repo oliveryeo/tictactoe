@@ -39,13 +39,23 @@ const gameBoard = (() => {
     selectedGrid.addMark(playerID);
   };
 
-  return { playGrid, getBoard };
+  const refreshBoard = () => {
+    board.length = 0;
+    for (let i = 0; i < rows; i++) {
+      board[i] = [];
+      for (let j = 0; j < columns; j++) {
+        board[i].push(cellFactory());
+      }
+    }
+  };
+
+  return { playGrid, getBoard, refreshBoard };
 })();
 
 // Module for Game Controller
 const gameController = ((
-  playerOneName = "Player One",
-  playerTwoName = "Player Two"
+  playerOneName = "Player O",
+  playerTwoName = "Player X"
 ) => {
   const players = [
     {
@@ -145,8 +155,8 @@ const gameController = ((
   };
 
   const getActivePlayer = () => activePlayer;
-
-  const getroundsElapsed = () => roundsElapsed;
+  const getRoundsElapsed = () => roundsElapsed;
+  const resetRoundsElapsed = () => roundsElapsed = 0;
 
   // For console checking purpose
   const printPlayerTurn = () => {
@@ -156,8 +166,10 @@ const gameController = ((
   return {
     playRound,
     getActivePlayer,
-    getroundsElapsed,
+    getRoundsElapsed,
+    resetRoundsElapsed,
     getBoard: gameBoard.getBoard,
+    refreshBoard: gameBoard.refreshBoard
   };
 })();
 
@@ -165,6 +177,18 @@ const gameController = ((
 const screenController = (() => {
   const playerTurnDiv = document.querySelector(".turn");
   const playGrids = document.querySelector(".play-grids");
+  const restartDiv = document.querySelector(".restart");
+
+  const restartButton = document.createElement("button");
+  restartButton.textContent = "Restart?";
+  restartButton.addEventListener("click", () => {
+    // Refresh the board and remove the restart button
+    gameController.refreshBoard();
+    gameController.resetRoundsElapsed();
+    restartDiv.removeChild(restartButton);
+    playGrids.addEventListener("click", clickHandlerBoard);
+    updateScreen();
+  })
 
   const updateScreen = (condition = 0) => {
     // clear the board
@@ -172,7 +196,7 @@ const screenController = (() => {
 
     // get the newest version of the board and player turn
     const board = gameController.getBoard();
-    const activePlayer = gameController.getActivePlayer();
+    const activePlayer = gameController.getActivePlayer(); 
 
     // Display player's turn
     playerTurnDiv.textContent = `${activePlayer.name}'s turn...`;
@@ -181,11 +205,13 @@ const screenController = (() => {
     board.forEach((row, rowIndex) => {
       row.forEach((cell, columnIndex) => {
         const cellButton = document.createElement("button");
-        cellButton.classList.add("cell");
-        // Create a data attribute to identify the column
-        // This makes it easier to pass into our `playRound` function
+        
+        /* Create a data attribute to identify the column
+           This makes it easier to pass into our `playRound` function
+        */
         cellButton.dataset.row = rowIndex;
         cellButton.dataset.column = columnIndex;
+
         if (cell.getValue() === 1) {
           cellButton.textContent = "O";
         } else if (cell.getValue() === 2) {
@@ -195,18 +221,16 @@ const screenController = (() => {
       });
     });
 
-    // TODO: Handle what appears on the screen when a winner is decided
+    // Handle what happens when a winner is decided
     if (condition === 1 || condition === 2) {
       // Display winner's name
       playerTurnDiv.textContent = `${activePlayer.name} is the winner!`;
-
-      // TODO: Edit DOM to display winning styles
-      
-      // TODO: Stop the game entirely by removing event listener to playGrids
-      playGrids.removeEventListener("click", clickHandlerBoard);
+      restartDiv.appendChild(restartButton);
+      playGrids.removeEventListener("click", clickHandlerBoard); // stops the game
     } else if (condition === 3) {
       playerTurnDiv.textContent = `It is a draw!`;
-      playGrids.removeEventListener("click", clickHandlerBoard);
+      restartDiv.appendChild(restartButton);
+      playGrids.removeEventListener("click", clickHandlerBoard); // stops the game
     }
   };
 
@@ -223,7 +247,7 @@ const screenController = (() => {
 
     // Runs playRound, checks if value 1 is returned (winner), run updateScreen() with winner condition?
     const roundValue = gameController.playRound(selectedRow, selectedColumn);
-    const totalRounds = gameController.getroundsElapsed();
+    const totalRounds = gameController.getRoundsElapsed();
     if (roundValue === 1) {
       console.log("Player 1 is winner!");
       updateScreen(1);
@@ -243,5 +267,6 @@ const screenController = (() => {
 
   // We don't need to return anything from this module because everything is encapsulated inside this screen controller.
 })();
+
 
 console.log(gameBoard.getBoard());

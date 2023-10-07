@@ -15,6 +15,13 @@ body,
 .container {
   display: grid;
   grid-template-rows: 200px 1fr 50px;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .play-area {
@@ -32,6 +39,7 @@ body,
 }
 
 .play-grids > button {
+  all: unset;
   border-style: solid;
   display: flex;
   justify-content: center;
@@ -39,8 +47,29 @@ body,
   font-size: 150px;
 }
 
-button {
+.restart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  top: 20px;
+}
+
+.restart > button {
   all: unset;
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 3rem;
+  width: 8rem;
+  border-radius: 4px;
+  background-color: lightgreen;
+  font-weight: bold;
+}
+
+.restart > button:hover {
+  background-color: rgb(129, 209, 129);
 }
 
 .turn {
