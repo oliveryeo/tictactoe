@@ -307,7 +307,8 @@ const screenController = (() => {
         playerTurnDiv.removeChild(nameInputDiv);
         updateScreen();
       } else {
-        console.log("Hi")
+        playerTurnDiv.removeChild(nameInputDiv);
+        updateScreen();
       }
     })
 
