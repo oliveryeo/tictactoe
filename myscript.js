@@ -71,6 +71,11 @@ const gameController = ((
   let roundsElapsed = 0;
   let activePlayer = players[0];
 
+  const updatePlayers = (playerOne, playerTwo) => {
+    players[0].name = playerOne;
+    players[1].name = playerTwo;
+  };
+
   const playRound = (row, column) => {
     console.log(
       `${getActivePlayer().name} has selected grid ${row}, ${column}...`
@@ -165,6 +170,7 @@ const gameController = ((
 
   return {
     playRound,
+    updatePlayers,
     getActivePlayer,
     getRoundsElapsed,
     resetRoundsElapsed,
@@ -262,8 +268,65 @@ const screenController = (() => {
   }
   playGrids.addEventListener("click", clickHandlerBoard);
 
-  // Initial render
-  updateScreen();
+  const playerNameScreen = () => {
+    /* TODO: Create a UI for players to key in their names for Player 1 and 2.
+       After submission, remove that UI and start rendering the game.
+    */
+
+    // Add nameInput class for styling
+    const nameInputDiv = document.createElement("div");
+    nameInputDiv.classList.add("nameInput");
+
+    // Create two input text fields
+    const playerOneName = document.createElement("input");
+    playerOneName.setAttribute("type", "text");
+    playerOneName.setAttribute("required", "");
+    const playerOneSpan = document.createElement("span");
+    playerOneSpan.textContent = "Player One: ";
+
+    const playerTwoName = document.createElement("input");
+    playerTwoName.setAttribute("type", "text");
+    playerTwoName.setAttribute("required", "");
+    const playerTwoSpan = document.createElement("span");
+    playerTwoSpan.textContent = "Player Two: ";
+
+    /* Create a submit button → upon clicking, submit whatever is in the text field as player1 and player2 into
+       gameController object (gameController.updatePlayers(player1, player2))
+    */
+    
+    // Set type to "button" to prevent form submission
+    const submitPlayerNames = document.createElement("button");
+    submitPlayerNames.setAttribute("type", "button");
+    submitPlayerNames.textContent = "Submit Names"
+
+    // Listen for click, and updatePlayers if textContent fields are not empty
+    submitPlayerNames.addEventListener("click", () => {
+      if (playerOneName.value != "" && playerTwoName.value != "") {
+        // Update player names, remove the inputs, update the play area for game time
+        gameController.updatePlayers(playerOneName.value, playerTwoName.value);
+        playerTurnDiv.removeChild(nameInputDiv);
+        updateScreen();
+      } else {
+        console.log("Hi")
+      }
+    })
+
+    nameInputDiv.appendChild(playerOneSpan);
+    nameInputDiv.appendChild(playerOneName);
+    nameInputDiv.appendChild(playerTwoSpan);
+    nameInputDiv.appendChild(playerTwoName);
+    nameInputDiv.appendChild(submitPlayerNames);
+
+    playerTurnDiv.appendChild(nameInputDiv);
+    
+
+    // Remove player name screen
+
+    // Render the playarea by updateScreen()
+  };
+
+  // Initial render → To change to playerNameScreen() once function is established
+  playerNameScreen();
 
   // We don't need to return anything from this module because everything is encapsulated inside this screen controller.
 })();
